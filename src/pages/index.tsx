@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Home() {
 	return (
@@ -9,10 +10,21 @@ export default function Home() {
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
-			<main className='container'>
-				<h1 className='text-center font-bold text-lg dark:text-cyan-50'>
-					Hola mundolo
-				</h1>
+			<main className='grid max-w-2xl m-auto h-screen place-items-center'>
+				<div className='grid w-full h-[90vh] border-cyan-50 rounded border bg-slate-900 place-content-center place-items-center'>
+					<img
+						className='h-40 m-auto -scale-x-100'
+						src='/logo.png'
+						alt='Logo'
+					/>
+					<h1 className='text-orange-400 text-4xl font-bold'>Fake twitter</h1>
+					<h2 className='text-orange-50 text-xl font-semibold'>
+						Believe me, this is not Twitter 🙂
+					</h2>
+					<button className='text-orange-50 bg-blue-500 rounded-full py-1 px-4 font-medium mt-4'>
+						Login with Github
+					</button>
+				</div>
 			</main>
 		</>
 	);
