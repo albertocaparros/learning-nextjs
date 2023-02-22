@@ -1,7 +1,30 @@
+import Button from '@/components/Button';
+import Github from '@/components/icons/Github';
 import Head from 'next/head';
-import Link from 'next/link';
+import { loginWithGithub, onAuthStateChanged } from '../firebase/client';
+import { useState, useEffect } from 'react';
+import Avatar from '@/components/Avatar';
+import Logo from '@/components/Logo';
+
+type User =
+	| {
+			avatar: string;
+			name: string;
+			email: string;
+	  }
+	| undefined;
 
 export default function Home() {
+	const [user, setUser] = useState<User>(undefined);
+
+	useEffect(() => {
+		onAuthStateChanged(setUser);
+	}, []);
+
+	const handleLogin = () => {
+		loginWithGithub();
+	};
+
 	return (
 		<>
 			<Head>
@@ -10,21 +33,32 @@ export default function Home() {
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
-			<main className='grid max-w-2xl m-auto h-screen place-items-center'>
-				<div className='grid w-full h-[90vh] border-cyan-50 rounded border bg-slate-900 place-content-center place-items-center'>
-					<img
-						className='h-40 m-auto -scale-x-100'
-						src='/logo.png'
-						alt='Logo'
-					/>
-					<h1 className='text-orange-400 text-4xl font-bold'>Fake twitter</h1>
-					<h2 className='text-orange-50 text-xl font-semibold'>
-						Believe me, this is not Twitter 🙂
-					</h2>
-					<button className='text-orange-50 bg-blue-500 rounded-full py-1 px-4 font-medium mt-4'>
-						Login with Github
-					</button>
-				</div>
+			<main className='grid h-screen max-w-2xl m-auto place-items-center place-content-center'>
+				<Logo className='h-40 m-auto' />
+				<h1 className='text-4xl font-bold text-orange-400'>Fake twitter</h1>
+				<h2 className='text-xl font-semibold text-orange-50'>
+					Believe me, this is not Twitter 🙂
+				</h2>
+				{user === null && (
+					<Button className='flex gap-1 align-center ' onClick={handleLogin}>
+						<Github className='w-7 text-orange-50'></Github>Login with Github
+					</Button>
+				)}
+				{user && (
+					<div className='flex items-center w-full space-x-4'>
+						<div className='flex-shrink-0'>
+							<Avatar img={user.avatar} />
+						</div>
+						<div className='flex-1 min-w-0'>
+							<p className='text-base font-medium text-gray-900 truncate dark:text-white'>
+								{user.name}
+							</p>
+							<p className='text-sm text-gray-500 truncate dark:text-gray-400'>
+								{user.email}
+							</p>
+						</div>
+					</div>
+				)}
 			</main>
 		</>
 	);
